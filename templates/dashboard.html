@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Pen Drive Security Dashboard</h2>
+
+    <!-- PD Active Status & Insert Count -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <i class="fas fa-usb"></i> Pen Drive Status
+                </div>
+                <div class="card-body">
+                    <p>
+                        <strong>Status:</strong>
+                        <span id="pd-status" class="badge bg-secondary">Checking...</span>
+                        <span data-bs-toggle="tooltip" title="Shows if a pen drive is currently connected.">
+                            <i class="fas fa-info-circle text-muted"></i>
+                        </span>
+                    </p>
+                    <p>
+                        <strong>Insertions:</strong>
+                        <span id="pd-insert-count" class="badge bg-info">0</span>
+                        <span data-bs-toggle="tooltip" title="Number of times a pen drive has been inserted.">
+                            <i class="fas fa-info-circle text-muted"></i>
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- Access Status -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <i class="fas fa-shield-alt"></i> Access Control
+                </div>
+                <div class="card-body">
+                    <p id="access-status" class="fs-5">Pending scan...</p>
+                    <span data-bs-toggle="tooltip" title="Access is granted only if no threats are found after scanning.">
+                        <i class="fas fa-info-circle text-muted"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Threats Found Section -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-danger text-white">
+            <i class="fas fa-bug"></i> Threats Detected
+        </div>
+        <div class="card-body">
+            <ul id="threats-list" class="mb-0"></ul>
+        </div>
+    </div>
+
+    <!-- OTP Verification Section -->
+    <div id="otp-form" class="card mb-4 shadow-sm" style="display: none;">
+        <div class="card-header bg-warning text-dark">
+            <i class="fas fa-envelope"></i> OTP Verification
+        </div>
+        <div class="card-body">
+            <p>
+                Please enter the OTP sent to your registered email address to proceed with scanning.
+            </p>
+            <form id="otp-verification-form" class="row g-3">
+                <div class="col-auto">
+                    <input type="text" class="form-control" id="otp-input" placeholder="Enter OTP" required>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-warning">Verify OTP</button>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-outline-info" onclick="sendOTP()">Send OTP</button>
+                </div>
+            </form>
+            <div id="otp-feedback" class="mt-2"></div>
+        </div>
+    </div>
+
+    <!-- PD Files and Folders Section -->
+    <div id="file-browser" class="card shadow-sm" style="display: none;">
+        <div class="card-header bg-success text-white">
+            <i class="fas fa-folder-open"></i> Pen Drive Files & Folders
+        </div>
+        <div class="card-body">
+            <div class="alert alert-info mb-3" id="file-browser-info" style="display:none;"></div>
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Size</th>
+                            <th>Last Modified</th>
+                            <th>Download</th>
+                        </tr>
+                    </thead>
+                    <tbody id="file-list"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Bootstrap tooltips
+document.addEventListener('DOMContentLoaded', function () {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+});
+
+let pdInsertCount = 0;
+let pdSafe = null;
+let threats = [];
+
+function updatePDStatus() {
+    fetch('/api/pd-status')
+        .then(res => res.json())
+        .then(data => {
+            const statusSpan = document.getElementById('pd-status');
+            statusSpan.textContent = data.active ? 'Active' : 'Inactive';
+            statusSpan.className = data.active ? 'badge bg-success' : 'badge bg-secondary';
+            pdInsertCount = data.insert_count;
+            document.getElementById('pd-insert-count').textContent = pdInsertCount;
+            if (data.active && data.needs_otp) {
+                document.getElementById('otp-form').style.display = 'block';
+                // Automatically send OTP when USB is detected
+                sendOTP();
+            } else {
+                document.getElementById('otp-form').style.display = 'none';
+            }
+        });
+}
+
+function sendOTP() {
+    fetch('/verify-usb', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('otp-feedback').innerHTML = '<span class="text-info">OTP sent to your email. Please check your inbox.</span>';
+        } else {
+            document.getElementById('otp-feedback').innerHTML = '<span class="text-danger">Failed to send OTP: ' + data.message + '</span>';
+        }
+    })
+    .catch(error => {
+        document.getElementById('otp-feedback').innerHTML = '<span class="text-danger">Error sending OTP: ' + error + '</span>';
+    });
+}
+
+function updateThreats() {
+    fetch('/api/pd-threats')
+        .then(res => res.json())
+        .then(data => {
+            threats = data.threats || [];
+            const list = document.getElementById('threats-list');
+            list.innerHTML = '';
+            if (threats.length === 0) {
+                list.innerHTML = '<li class="text-success">No threats found.</li>';
+            } else {
+                threats.forEach(t => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<span class="text-danger"><i class="fas fa-exclamation-triangle"></i> ${t}</span>`;
+                    list.appendChild(li);
+                });
+            }
+        });
+}
+
+function updateAccessStatus() {
+    fetch('/api/pd-scan-status')
+        .then(res => res.json())
+        .then(data => {
+            pdSafe = data.safe;
+            const status = document.getElementById('access-status');
+            if (data.scanned) {
+                if (pdSafe) {
+                    status.innerHTML = '<span class="badge bg-success fs-6">Access Granted</span>';
+                    document.getElementById('file-browser').style.display = 'block';
+                    document.getElementById('file-browser-info').style.display = 'none';
+                    loadPDFileList();
+                } else {
+                    status.innerHTML = '<span class="badge bg-danger fs-6">Access Denied (Virus Found)</span>';
+                    document.getElementById('file-browser').style.display = 'block';
+                    document.getElementById('file-browser-info').style.display = 'block';
+                    document.getElementById('file-browser-info').textContent = 'All downloads are blocked due to detected threats.';
+                    loadPDFileList(true); // show files but block download
+                }
+            } else {
+                status.innerHTML = '<span class="badge bg-secondary fs-6">Pending scan...</span>';
+                document.getElementById('file-browser').style.display = 'none';
+            }
+        });
+}
+
+function loadPDFileList(denyDownload = false) {
+    fetch('/api/pd-files')
+        .then(res => res.json())
+        .then(data => {
+            const tbody = document.getElementById('file-list');
+            tbody.innerHTML = '';
+            data.files.forEach(file => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><i class="fas ${file.type === 'directory' ? 'fa-folder text-warning' : 'fa-file text-secondary'}"></i> ${file.name}</td>
+                    <td>${file.type.charAt(0).toUpperCase() + file.type.slice(1)}</td>
+                    <td>${file.size}</td>
+                    <td>${file.modified}</td>
+                    <td>
+                        ${file.type === 'file' && !denyDownload
+                            ? `<button class="btn btn-sm btn-success" onclick="downloadFile('${file.path}')"><i class="fas fa-download"></i> Download</button>`
+                            : file.type === 'file' && denyDownload
+                                ? `<span class="text-danger">Blocked</span>`
+                                : ''
+                        }
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        });
+}
+
+function downloadFile(path) {
+    window.location.href = `/download-file?path=${encodeURIComponent(path)}`;
+}
+
+// OTP Verification
+document.getElementById('otp-verification-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const otp = document.getElementById('otp-input').value;
+    const feedback = document.getElementById('otp-feedback');
+    feedback.textContent = '';
+    fetch('/verify-usb-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ otp })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            feedback.innerHTML = '<span class="text-success">OTP verified. Scanning will begin.</span>';
+            document.getElementById('otp-form').style.display = 'none';
+            // Trigger scan after OTP
+            fetch('/api/scan-pd', { method: 'POST' })
+                .then(() => {
+                    updateThreats();
+                    updateAccessStatus();
+                });
+        } else {
+            feedback.innerHTML = '<span class="text-danger">Invalid OTP. Please try again.</span>';
+        }
+    });
+});
+
+// Initial load and polling
+updatePDStatus();
+updateThreats();
+updateAccessStatus();
+setInterval(() => {
+    updatePDStatus();
+    updateThreats();
+    updateAccessStatus();
+}, 3000);
+</script>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="mb-4">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3>Drive Details</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Name:</strong> {{ drive.name }}</p>
+                    <p><strong>Serial Number:</strong> {{ drive.serial_number }}</p>
+                    <p><strong>Status:</strong> {{ drive.status }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Added:</strong> {{ drive.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                    <p><strong>Last Access:</strong> {{ drive.last_access.strftime('%Y-%m-%d %H:%M:%S') if drive.last_access else 'Never' }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Access History</h3>
+        </div>
+        <div class="card-body">
+            {% if logs %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Action</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in logs %}
+                            <tr>
+                                <td>{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                <td>{{ log.action }}</td>
+                                <td>{{ log.details }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p>No access history available.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

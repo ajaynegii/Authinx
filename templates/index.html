@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="display-4 mb-4">
+                    <i class="fas fa-shield-alt me-2"></i>Secure USB Access Control
+                </h1>
+                <p class="lead mb-4">
+                    A comprehensive system for secure USB drive access with malware scanning, 
+                    OTP authentication, and activity logging.
+                </p>
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

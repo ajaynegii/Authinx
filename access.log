@@ -1,0 +1,216 @@
+2025-06-15 00:30:20,263 - INFO -  * Restarting with watchdog (windowsapi)
+2025-06-15 00:30:21,674 - WARNING -  * Debugger is active!
+2025-06-15 00:30:21,682 - INFO -  * Debugger PIN: 489-346-594
+2025-06-15 00:31:12,742 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-06-15 00:32:07,903 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-06-15 00:32:50,382 - INFO - 127.0.0.1 - - [15/Jun/2025 00:32:50] "GET / HTTP/1.1" 200 -
+2025-06-15 00:32:51,292 - INFO - 127.0.0.1 - - [15/Jun/2025 00:32:51] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-06-15 00:32:52,899 - INFO - 127.0.0.1 - - [15/Jun/2025 00:32:52] "GET /login HTTP/1.1" 200 -
+2025-06-15 00:33:09,944 - INFO - 127.0.0.1 - - [15/Jun/2025 00:33:09] "[31m[1mPOST /login HTTP/1.1[0m" 401 -
+2025-06-15 00:33:20,375 - INFO - 127.0.0.1 - - [15/Jun/2025 00:33:20] "GET /login HTTP/1.1" 200 -
+2025-06-15 00:34:07,364 - INFO - 127.0.0.1 - - [15/Jun/2025 00:34:07] "[31m[1mPOST /login HTTP/1.1[0m" 401 -
+2025-06-15 00:34:32,887 - ERROR - Error sending OTP email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials d2e1a72fcca58-7488ffed087sm3660357b3a.29 - gsmtp')
+2025-06-15 00:34:32,888 - INFO - 127.0.0.1 - - [15/Jun/2025 00:34:32] "[31m[1mPOST /login HTTP/1.1[0m" 401 -
+2025-06-15 00:36:03,396 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-06-15 00:36:10,675 - INFO - 127.0.0.1 - - [15/Jun/2025 00:36:10] "GET / HTTP/1.1" 200 -
+2025-06-15 00:36:10,846 - INFO - 127.0.0.1 - - [15/Jun/2025 00:36:10] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-06-15 00:36:12,175 - INFO - 127.0.0.1 - - [15/Jun/2025 00:36:12] "GET /login HTTP/1.1" 200 -
+2025-06-15 00:36:28,484 - INFO - 127.0.0.1 - - [15/Jun/2025 00:36:28] "[31m[1mPOST /login HTTP/1.1[0m" 401 -
+2025-06-15 00:37:12,041 - ERROR - Error sending OTP email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 98e67ed59e1d1-313c1c4e3acsm6087999a91.32 - gsmtp')
+2025-06-15 00:37:12,042 - INFO - 127.0.0.1 - - [15/Jun/2025 00:37:12] "[31m[1mPOST /login HTTP/1.1[0m" 401 -
+2025-06-15 00:39:25,292 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-06-15 00:39:28,015 - INFO - 127.0.0.1 - - [15/Jun/2025 00:39:28] "[33mGET /signup HTTP/1.1[0m" 404 -
+2025-06-15 00:40:56,116 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-06-15 00:45:06,278 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-06-15 00:46:22,314 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-06-15 00:46:26,110 - INFO - 127.0.0.1 - - [15/Jun/2025 00:46:26] "GET / HTTP/1.1" 200 -
+2025-06-15 00:46:26,666 - INFO - 127.0.0.1 - - [15/Jun/2025 00:46:26] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-06-15 00:46:28,510 - INFO - 127.0.0.1 - - [15/Jun/2025 00:46:28] "GET /login HTTP/1.1" 200 -
+2025-06-15 00:46:45,673 - ERROR - Error sending OTP email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials d9443c01a7336-2365deb4e27sm33644475ad.176 - gsmtp')
+2025-06-15 00:46:45,674 - INFO - 127.0.0.1 - - [15/Jun/2025 00:46:45] "[31m[1mPOST /login HTTP/1.1[0m" 401 -
+2025-06-15 00:46:49,411 - INFO - 127.0.0.1 - - [15/Jun/2025 00:46:49] "GET /signup HTTP/1.1" 200 -
+2025-06-15 00:47:01,780 - INFO - 127.0.0.1 - - [15/Jun/2025 00:47:01] "[32mPOST /signup HTTP/1.1[0m" 302 -
+2025-06-15 00:47:01,787 - INFO - 127.0.0.1 - - [15/Jun/2025 00:47:01] "GET /login HTTP/1.1" 200 -
+2025-06-15 00:47:18,530 - ERROR - Error sending OTP email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials d9443c01a7336-2365dfc6990sm33491615ad.224 - gsmtp')
+2025-06-15 00:47:18,531 - INFO - 127.0.0.1 - - [15/Jun/2025 00:47:18] "[31m[1mPOST /login HTTP/1.1[0m" 401 -
+2025-06-15 00:47:20,489 - INFO - 127.0.0.1 - - [15/Jun/2025 00:47:20] "GET /login HTTP/1.1" 200 -
+2025-06-15 00:47:23,398 - INFO - 127.0.0.1 - - [15/Jun/2025 00:47:23] "GET /login HTTP/1.1" 200 -
+2025-06-15 00:47:32,869 - ERROR - Error sending OTP email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials d2e1a72fcca58-7488ffeca93sm3681229b3a.20 - gsmtp')
+2025-06-15 00:47:32,871 - INFO - 127.0.0.1 - - [15/Jun/2025 00:47:32] "[31m[1mPOST /login HTTP/1.1[0m" 401 -
+2025-06-15 00:48:30,688 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-06-15 00:49:43,626 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-06-15 00:50:11,469 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-06-15 00:51:05,195 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-06-15 00:51:18,503 - INFO - 127.0.0.1 - - [15/Jun/2025 00:51:18] "GET /login HTTP/1.1" 200 -
+2025-06-15 00:51:21,265 - INFO - 127.0.0.1 - - [15/Jun/2025 00:51:21] "GET /login HTTP/1.1" 200 -
+2025-06-15 00:51:42,434 - INFO - 127.0.0.1 - - [15/Jun/2025 00:51:42] "GET / HTTP/1.1" 200 -
+2025-06-15 00:51:43,056 - INFO - 127.0.0.1 - - [15/Jun/2025 00:51:43] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-06-15 00:51:45,409 - INFO - 127.0.0.1 - - [15/Jun/2025 00:51:45] "GET /login HTTP/1.1" 200 -
+2025-06-15 00:51:47,917 - INFO - 127.0.0.1 - - [15/Jun/2025 00:51:47] "GET /signup HTTP/1.1" 200 -
+2025-06-15 00:51:48,811 - INFO -  * Restarting with watchdog (windowsapi)
+2025-06-15 00:51:50,511 - WARNING -  * Debugger is active!
+2025-06-15 00:51:50,519 - INFO -  * Debugger PIN: 489-346-594
+2025-06-15 00:52:00,259 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-15 00:52:00,260 - INFO -  * Running on http://192.168.29.168:5000/ (Press CTRL+C to quit)
+2025-06-15 00:52:01,201 - INFO - 127.0.0.1 - - [15/Jun/2025 00:52:01] "POST /signup HTTP/1.1" 200 -
+2025-06-15 00:52:07,156 - INFO - 127.0.0.1 - - [15/Jun/2025 00:52:07] "GET /login HTTP/1.1" 200 -
+2025-06-15 00:52:19,499 - ERROR - Error sending OTP email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials d9443c01a7336-2365deaaa05sm33455155ad.174 - gsmtp')
+2025-06-15 00:52:19,502 - INFO - 127.0.0.1 - - [15/Jun/2025 00:52:19] "POST /login HTTP/1.1" 200 -
+2025-06-15 00:52:32,412 - ERROR - Error sending OTP email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials d2e1a72fcca58-74890082acbsm3656174b3a.74 - gsmtp')
+2025-06-15 00:52:32,414 - INFO - 127.0.0.1 - - [15/Jun/2025 00:52:32] "POST /login HTTP/1.1" 200 -
+2025-06-15 00:52:38,357 - INFO - 127.0.0.1 - - [15/Jun/2025 00:52:38] "GET /login HTTP/1.1" 200 -
+2025-06-15 00:52:39,859 - INFO - 127.0.0.1 - - [15/Jun/2025 00:52:39] "GET /login HTTP/1.1" 200 -
+2025-06-15 00:59:54,696 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-15 00:59:54,697 - INFO -  * Running on http://192.168.29.168:5000/ (Press CTRL+C to quit)
+2025-06-15 01:00:42,110 - INFO - 127.0.0.1 - - [15/Jun/2025 01:00:42] "GET /login HTTP/1.1" 200 -
+2025-06-15 01:00:51,158 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-15 01:00:51,159 - INFO -  * Running on http://192.168.29.168:8080/ (Press CTRL+C to quit)
+2025-06-15 01:01:07,128 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-15 01:01:07,130 - INFO -  * Running on http://192.168.29.168:8080/ (Press CTRL+C to quit)
+2025-06-15 01:01:40,553 - INFO - 127.0.0.1 - - [15/Jun/2025 01:01:40] "GET / HTTP/1.1" 200 -
+2025-06-15 01:01:40,906 - INFO - 127.0.0.1 - - [15/Jun/2025 01:01:40] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-06-15 01:01:44,525 - INFO - 127.0.0.1 - - [15/Jun/2025 01:01:44] "GET /login HTTP/1.1" 200 -
+2025-06-15 01:01:47,273 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-15 01:01:47,274 - INFO -  * Running on http://192.168.29.168:8080/ (Press CTRL+C to quit)
+2025-06-15 01:01:59,249 - ERROR - Error sending OTP email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials d9443c01a7336-2365dfc68c1sm33491975ad.238 - gsmtp')
+2025-06-15 01:01:59,253 - INFO - 127.0.0.1 - - [15/Jun/2025 01:01:59] "POST /login HTTP/1.1" 200 -
+2025-06-15 01:02:04,373 - INFO - 127.0.0.1 - - [15/Jun/2025 01:02:04] "GET /signup HTTP/1.1" 200 -
+2025-06-15 01:02:14,679 - INFO - 127.0.0.1 - - [15/Jun/2025 01:02:14] "[32mPOST /signup HTTP/1.1[0m" 302 -
+2025-06-15 01:02:14,692 - INFO - 127.0.0.1 - - [15/Jun/2025 01:02:14] "GET /login HTTP/1.1" 200 -
+2025-06-15 01:02:29,967 - ERROR - Error sending OTP email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials d9443c01a7336-2365deb2cf8sm33720255ad.184 - gsmtp')
+2025-06-15 01:02:29,971 - INFO - 127.0.0.1 - - [15/Jun/2025 01:02:29] "POST /login HTTP/1.1" 200 -
+2025-06-15 01:04:17,532 - INFO - 127.0.0.1 - - [15/Jun/2025 01:04:17] "GET /signup HTTP/1.1" 200 -
+2025-06-15 01:04:44,623 - INFO - 127.0.0.1 - - [15/Jun/2025 01:04:44] "POST /signup HTTP/1.1" 200 -
+2025-06-15 01:04:58,547 - INFO - 127.0.0.1 - - [15/Jun/2025 01:04:58] "POST /signup HTTP/1.1" 200 -
+2025-06-15 01:05:09,194 - INFO - 127.0.0.1 - - [15/Jun/2025 01:05:09] "GET /login HTTP/1.1" 200 -
+2025-06-15 01:05:16,330 - INFO - 127.0.0.1 - - [15/Jun/2025 01:05:16] "POST /login HTTP/1.1" 200 -
+2025-06-15 01:06:43,297 - INFO - 127.0.0.1 - - [15/Jun/2025 01:06:43] "GET / HTTP/1.1" 200 -
+2025-06-15 01:06:47,525 - INFO - 127.0.0.1 - - [15/Jun/2025 01:06:47] "GET /login HTTP/1.1" 200 -
+2025-06-15 01:07:08,742 - ERROR - Error sending OTP email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials d9443c01a7336-2365d88bf78sm33637495ad.27 - gsmtp')
+2025-06-15 01:07:08,745 - INFO - 127.0.0.1 - - [15/Jun/2025 01:07:08] "POST /login HTTP/1.1" 200 -
+2025-06-15 01:07:16,405 - INFO - 127.0.0.1 - - [15/Jun/2025 01:07:16] "GET /login HTTP/1.1" 200 -
+2025-06-15 01:08:53,429 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-15 01:08:53,429 - INFO -  * Running on http://192.168.29.168:8080/ (Press CTRL+C to quit)
+2025-06-15 01:09:33,431 - INFO - 127.0.0.1 - - [15/Jun/2025 01:09:33] "GET / HTTP/1.1" 200 -
+2025-06-15 01:09:34,061 - INFO - 127.0.0.1 - - [15/Jun/2025 01:09:34] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-06-15 01:09:35,907 - INFO - 127.0.0.1 - - [15/Jun/2025 01:09:35] "GET /login HTTP/1.1" 200 -
+2025-06-15 01:10:34,750 - INFO - 127.0.0.1 - - [15/Jun/2025 01:10:34] "POST /login HTTP/1.1" 200 -
+2025-06-15 01:10:46,988 - ERROR - Error sending OTP email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials d2e1a72fcca58-7488ffed0c2sm3697409b3a.22 - gsmtp')
+2025-06-15 01:10:46,991 - INFO - 127.0.0.1 - - [15/Jun/2025 01:10:46] "POST /login HTTP/1.1" 200 -
+2025-06-15 01:10:49,941 - INFO - 127.0.0.1 - - [15/Jun/2025 01:10:49] "GET /signup HTTP/1.1" 200 -
+2025-06-15 01:11:04,775 - INFO - 127.0.0.1 - - [15/Jun/2025 01:11:04] "[32mPOST /signup HTTP/1.1[0m" 302 -
+2025-06-15 01:11:04,787 - INFO - 127.0.0.1 - - [15/Jun/2025 01:11:04] "GET /login HTTP/1.1" 200 -
+2025-06-15 01:11:46,805 - ERROR - Error sending OTP email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials d2e1a72fcca58-74890006294sm3702012b3a.47 - gsmtp')
+2025-06-15 01:11:46,807 - INFO - 127.0.0.1 - - [15/Jun/2025 01:11:46] "POST /login HTTP/1.1" 200 -
+2025-06-15 01:13:36,678 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-15 01:13:36,681 - INFO -  * Running on http://192.168.29.168:8080/ (Press CTRL+C to quit)
+2025-06-15 01:13:39,070 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-15 01:13:39,071 - INFO -  * Running on http://192.168.29.168:8080/ (Press CTRL+C to quit)
+2025-06-15 01:13:44,528 - INFO - 127.0.0.1 - - [15/Jun/2025 01:13:44] "GET / HTTP/1.1" 200 -
+2025-06-15 01:13:49,186 - INFO - 127.0.0.1 - - [15/Jun/2025 01:13:49] "GET /login HTTP/1.1" 200 -
+2025-06-15 01:14:01,297 - INFO - 127.0.0.1 - - [15/Jun/2025 01:14:01] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2025-06-15 01:14:01,632 - INFO - 127.0.0.1 - - [15/Jun/2025 01:14:01] "GET /login?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2025-06-15 01:14:01,732 - INFO - 127.0.0.1 - - [15/Jun/2025 01:14:01] "GET /login?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2025-06-15 01:14:02,159 - INFO - 127.0.0.1 - - [15/Jun/2025 01:14:02] "GET /login?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+2025-06-15 01:14:02,175 - INFO - 127.0.0.1 - - [15/Jun/2025 01:14:02] "GET /login?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2025-06-15 01:14:02,377 - INFO - 127.0.0.1 - - [15/Jun/2025 01:14:02] "GET /login?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2025-06-15 01:15:36,489 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-15 01:15:36,492 - INFO -  * Running on http://192.168.29.168:8080/ (Press CTRL+C to quit)
+2025-06-15 01:20:53,493 - INFO - Serving on http://0.0.0.0:8080
+2025-06-15 01:21:33,709 - INFO - Serving on http://0.0.0.0:8080
+2025-06-15 01:22:55,774 - INFO - Serving on http://0.0.0.0:8080
+2025-06-15 01:26:08,678 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.29.168:8080
+2025-06-15 01:26:08,679 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-15 01:26:13,736 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.29.168:8080
+2025-06-15 01:26:13,737 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-15 01:26:26,626 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.29.168:8080
+2025-06-15 01:26:26,627 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-15 01:26:33,594 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.29.168:8080
+2025-06-15 01:26:33,595 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-15 01:27:52,823 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.29.168:8080
+2025-06-15 01:27:52,823 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-15 01:28:05,481 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.29.168:8080
+2025-06-15 01:28:05,482 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-15 01:28:45,729 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.29.168:8080
+2025-06-15 01:28:45,729 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-15 01:29:13,860 - INFO - Serving on http://0.0.0.0:8080
+2025-06-15 01:30:28,297 - INFO - Serving on http://0.0.0.0:8080
+2025-06-15 01:31:18,302 - INFO - 127.0.0.1 - - [15/Jun/2025 01:31:18] "GET / HTTP/1.1" 200 -
+2025-06-15 01:31:18,526 - INFO - 127.0.0.1 - - [15/Jun/2025 01:31:18] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-06-15 01:31:20,244 - INFO - 127.0.0.1 - - [15/Jun/2025 01:31:20] "GET /login HTTP/1.1" 200 -
+2025-06-15 01:31:28,823 - INFO - 127.0.0.1 - - [15/Jun/2025 01:31:28] "POST /login HTTP/1.1" 200 -
+2025-06-15 01:32:01,229 - INFO - 127.0.0.1 - - [15/Jun/2025 01:32:01] "POST /login HTTP/1.1" 200 -
+2025-06-15 01:32:09,812 - INFO - 127.0.0.1 - - [15/Jun/2025 01:32:09] "POST /login HTTP/1.1" 200 -
+2025-06-15 01:32:12,099 - INFO - 127.0.0.1 - - [15/Jun/2025 01:32:12] "GET /signup HTTP/1.1" 200 -
+2025-06-15 01:32:24,908 - INFO - 127.0.0.1 - - [15/Jun/2025 01:32:24] "[32mPOST /signup HTTP/1.1[0m" 302 -
+2025-06-15 01:32:24,921 - INFO - 127.0.0.1 - - [15/Jun/2025 01:32:24] "GET /login HTTP/1.1" 200 -
+2025-06-15 01:32:33,490 - INFO - 127.0.0.1 - - [15/Jun/2025 01:32:33] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-06-15 01:32:33,573 - INFO - 127.0.0.1 - - [15/Jun/2025 01:32:33] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
+2025-06-15 01:32:33,807 - INFO - 127.0.0.1 - - [15/Jun/2025 01:32:33] "GET /dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2025-06-15 01:32:34,042 - INFO - 127.0.0.1 - - [15/Jun/2025 01:32:34] "GET /dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2025-06-15 01:32:34,487 - INFO - 127.0.0.1 - - [15/Jun/2025 01:32:34] "GET /dashboard?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2025-06-15 01:32:34,751 - INFO - 127.0.0.1 - - [15/Jun/2025 01:32:34] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2025-06-15 01:33:51,701 - INFO - Serving on http://0.0.0.0:8080
+2025-06-15 01:35:47,958 - INFO - 127.0.0.1 - - [15/Jun/2025 01:35:47] "GET / HTTP/1.1" 200 -
+2025-06-15 01:35:51,361 - INFO - 127.0.0.1 - - [15/Jun/2025 01:35:51] "GET /login HTTP/1.1" 200 -
+2025-06-15 01:36:00,550 - INFO - 127.0.0.1 - - [15/Jun/2025 01:36:00] "POST /login HTTP/1.1" 200 -
+2025-06-15 01:36:05,480 - INFO - 127.0.0.1 - - [15/Jun/2025 01:36:05] "GET /signup HTTP/1.1" 200 -
+2025-06-15 01:36:16,852 - INFO - 127.0.0.1 - - [15/Jun/2025 01:36:16] "[32mPOST /signup HTTP/1.1[0m" 302 -
+2025-06-15 01:36:16,865 - INFO - 127.0.0.1 - - [15/Jun/2025 01:36:16] "GET /login HTTP/1.1" 200 -
+2025-06-15 01:36:27,173 - INFO - 127.0.0.1 - - [15/Jun/2025 01:36:27] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-06-15 01:36:27,513 - INFO - 127.0.0.1 - - [15/Jun/2025 01:36:27] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
+2025-06-15 01:36:27,755 - INFO - 127.0.0.1 - - [15/Jun/2025 01:36:27] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-06-15 01:36:27,893 - INFO - 127.0.0.1 - - [15/Jun/2025 01:36:27] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-06-15 01:36:27,980 - INFO - 127.0.0.1 - - [15/Jun/2025 01:36:27] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2025-06-15 01:39:09,726 - INFO - Serving on http://0.0.0.0:8080
+2025-06-15 01:39:18,086 - INFO - 127.0.0.1 - - [15/Jun/2025 01:39:18] "GET / HTTP/1.1" 200 -
+2025-06-15 01:39:21,346 - INFO - 127.0.0.1 - - [15/Jun/2025 01:39:21] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
+2025-06-15 01:39:21,413 - INFO - 127.0.0.1 - - [15/Jun/2025 01:39:21] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-06-15 01:39:21,723 - INFO - 127.0.0.1 - - [15/Jun/2025 01:39:21] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-06-15 01:39:22,163 - INFO - 127.0.0.1 - - [15/Jun/2025 01:39:22] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2025-06-15 01:42:21,413 - INFO - Serving on http://0.0.0.0:8080
+2025-06-15 01:42:27,023 - INFO - 127.0.0.1 - - [15/Jun/2025 01:42:27] "GET / HTTP/1.1" 200 -
+2025-06-15 01:42:28,792 - INFO - 127.0.0.1 - - [15/Jun/2025 01:42:28] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
+2025-06-15 01:42:29,033 - INFO - 127.0.0.1 - - [15/Jun/2025 01:42:29] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-06-15 01:42:29,361 - INFO - 127.0.0.1 - - [15/Jun/2025 01:42:29] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-06-15 01:42:29,917 - INFO - 127.0.0.1 - - [15/Jun/2025 01:42:29] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2025-06-15 01:42:36,339 - INFO - Serving on http://0.0.0.0:8080
+2025-06-15 11:00:52,091 - INFO - 127.0.0.1 - - [15/Jun/2025 11:00:52] "GET / HTTP/1.1" 200 -
+2025-06-15 11:00:52,475 - INFO - 127.0.0.1 - - [15/Jun/2025 11:00:52] "GET / HTTP/1.1" 200 -
+2025-06-15 11:00:52,865 - INFO - 127.0.0.1 - - [15/Jun/2025 11:00:52] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-06-15 11:00:56,658 - INFO - 127.0.0.1 - - [15/Jun/2025 11:00:56] "GET /login HTTP/1.1" 200 -
+2025-06-15 11:01:08,265 - INFO - 127.0.0.1 - - [15/Jun/2025 11:01:08] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-06-15 11:01:08,358 - INFO - 127.0.0.1 - - [15/Jun/2025 11:01:08] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
+2025-06-15 11:01:08,431 - INFO - 127.0.0.1 - - [15/Jun/2025 11:01:08] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-06-15 11:01:08,756 - INFO - 127.0.0.1 - - [15/Jun/2025 11:01:08] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-06-15 11:01:09,205 - INFO - 127.0.0.1 - - [15/Jun/2025 11:01:09] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
