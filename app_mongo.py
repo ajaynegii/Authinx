@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 import subprocess
 import mimetypes
 from werkzeug.utils import secure_filename
+import random
 
 # Load environment variables
 load_dotenv()
@@ -263,11 +264,16 @@ def check_usb():
 @app.route('/verify-usb', methods=['POST'])
 @login_required
 def verify_usb():
-    """Send OTP for USB verification"""
+    """Send automatic OTP for USB verification (only once per session)"""
     try:
-        # Generate OTP
-        otp = pyotp.TOTP(current_user.otp_secret).now()
-        print(f"[DEBUG] OTP for {current_user.email}: {otp}")  # Print OTP for testing
+        # Check if automatic OTP was already sent in this session
+        if session.get('auto_otp_sent'):
+            return jsonify({'success': True, 'message': 'OTP already sent automatically', 'otp_already_sent': True})
+
+        # Generate random 6-digit OTP
+        otp = str(random.randint(100000, 999999))
+        print(f"[DEBUG] Automatic OTP for {current_user.email}: {otp}")  # Print OTP for testing
+
         # Send OTP via email
         msg = Message('USB Drive Verification OTP',
                      sender=app.config['MAIL_USERNAME'],
@@ -275,16 +281,19 @@ def verify_usb():
         msg.body = f'Your OTP for USB drive verification is: {otp}'
         try:
             mail.send(msg)
-            print(f"[DEBUG] OTP email sent to {current_user.email}")
+            print(f"[DEBUG] Automatic OTP email sent to {current_user.email}")
         except Exception as mail_error:
             import traceback
-            print(f"[ERROR] Failed to send OTP email: {mail_error}")
+            print(f"[ERROR] Failed to send automatic OTP email: {mail_error}")
             traceback.print_exc()
             return jsonify({'success': False, 'message': f'Error sending OTP: {mail_error}'})
-        # Store OTP in session
+
+        # Store OTP in session and mark automatic OTP as sent
         session['usb_otp'] = otp
         session['otp_time'] = datetime.utcnow().timestamp()
-        return jsonify({'success': True})
+        session['auto_otp_sent'] = True
+
+        return jsonify({'success': True, 'message': 'OTP sent automatically', 'otp_already_sent': False})
     except Exception as e:
         import traceback
         print(f"[ERROR] Unexpected error in verify_usb: {e}")
