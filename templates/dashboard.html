@@ -102,6 +102,29 @@
             </div>
         </div>
     </div>
+
+    <!-- Access History Section -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-info text-white">
+            <i class="fas fa-history"></i> Access History
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Day</th>
+                            <th>Drive</th>
+                            <th>Status</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="access-history-list"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -116,6 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
 let pdInsertCount = 0;
 let pdSafe = null;
 let threats = [];
+let autoOtpSent = false;
 
 function updatePDStatus() {
     fetch('/api/pd-status')
@@ -128,10 +152,14 @@ function updatePDStatus() {
             document.getElementById('pd-insert-count').textContent = pdInsertCount;
             if (data.active && data.needs_otp) {
                 document.getElementById('otp-form').style.display = 'block';
-                // Automatically send OTP when USB is detected
-                sendOTP();
+                // Automatically send OTP when USB is detected, only once per detection
+                if (!autoOtpSent) {
+                    sendOTP();
+                    autoOtpSent = true;
+                }
             } else {
                 document.getElementById('otp-form').style.display = 'none';
+                autoOtpSent = false; // Reset when USB is removed
             }
         });
 }
@@ -184,13 +212,13 @@ function updateAccessStatus() {
                     status.innerHTML = '<span class="badge bg-success fs-6">Access Granted</span>';
                     document.getElementById('file-browser').style.display = 'block';
                     document.getElementById('file-browser-info').style.display = 'none';
-                    loadPDFileList();
+                    loadAccessHistory();
                 } else {
                     status.innerHTML = '<span class="badge bg-danger fs-6">Access Denied (Virus Found)</span>';
                     document.getElementById('file-browser').style.display = 'block';
                     document.getElementById('file-browser-info').style.display = 'block';
                     document.getElementById('file-browser-info').textContent = 'All downloads are blocked due to detected threats.';
-                    loadPDFileList(true); // show files but block download
+                    loadAccessHistory(); // show files but block download
                 }
             } else {
                 status.innerHTML = '<span class="badge bg-secondary fs-6">Pending scan...</span>';
@@ -199,35 +227,28 @@ function updateAccessStatus() {
         });
 }
 
-function loadPDFileList(denyDownload = false) {
-    fetch('/api/pd-files')
+function loadAccessHistory() {
+    fetch('/api/access-history')
         .then(res => res.json())
         .then(data => {
-            const tbody = document.getElementById('file-list');
+            const tbody = document.getElementById('access-history-list');
             tbody.innerHTML = '';
-            data.files.forEach(file => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td><i class="fas ${file.type === 'directory' ? 'fa-folder text-warning' : 'fa-file text-secondary'}"></i> ${file.name}</td>
-                    <td>${file.type.charAt(0).toUpperCase() + file.type.slice(1)}</td>
-                    <td>${file.size}</td>
-                    <td>${file.modified}</td>
-                    <td>
-                        ${file.type === 'file' && !denyDownload
-                            ? `<button class="btn btn-sm btn-success" onclick="downloadFile('${file.path}')"><i class="fas fa-download"></i> Download</button>`
-                            : file.type === 'file' && denyDownload
-                                ? `<span class="text-danger">Blocked</span>`
-                                : ''
-                        }
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
+            if (data.history.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5">No access history available.</td></tr>';
+            } else {
+                data.history.forEach(entry => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${entry.timestamp}</td>
+                        <td>${entry.day}</td>
+                        <td>${entry.drive_name || entry.serial_number || '-'}</td>
+                        <td>${entry.status}</td>
+                        <td>${entry.details}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
         });
-}
-
-function downloadFile(path) {
-    window.location.href = `/download-file?path=${encodeURIComponent(path)}`;
 }
 
 // OTP Verification

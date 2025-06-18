@@ -307,27 +307,60 @@ def verify_usb_otp():
     try:
         data = request.get_json()
         otp = data.get('otp')
-        
         # Check if OTP exists and is not expired (5 minutes)
         stored_otp = session.get('usb_otp')
         otp_time = session.get('otp_time')
-        
         if not stored_otp or not otp_time:
+            # Log denied attempt
+            access_logs_collection.insert_one({
+                'user_id': current_user.id,
+                'action': 'OTP_VERIFY',
+                'details': 'No OTP found',
+                'timestamp': datetime.utcnow(),
+                'status': 'Denied'
+            })
             return jsonify({'success': False, 'message': 'No OTP found'})
-        
         if datetime.utcnow().timestamp() - otp_time > 300:  # 5 minutes
+            # Log denied attempt
+            access_logs_collection.insert_one({
+                'user_id': current_user.id,
+                'action': 'OTP_VERIFY',
+                'details': 'OTP expired',
+                'timestamp': datetime.utcnow(),
+                'status': 'Denied'
+            })
             return jsonify({'success': False, 'message': 'OTP expired'})
-        
         if otp != stored_otp:
+            # Log denied attempt
+            access_logs_collection.insert_one({
+                'user_id': current_user.id,
+                'action': 'OTP_VERIFY',
+                'details': 'Invalid OTP',
+                'timestamp': datetime.utcnow(),
+                'status': 'Denied'
+            })
             return jsonify({'success': False, 'message': 'Invalid OTP'})
-        
         # Clear OTP from session
         session.pop('usb_otp', None)
         session.pop('otp_time', None)
-        
+        # Log granted attempt
+        access_logs_collection.insert_one({
+            'user_id': current_user.id,
+            'action': 'OTP_VERIFY',
+            'details': 'OTP verified. Access granted.',
+            'timestamp': datetime.utcnow(),
+            'status': 'Granted'
+        })
         return jsonify({'success': True})
     except Exception as e:
         print(f"Error verifying OTP: {str(e)}")
+        access_logs_collection.insert_one({
+            'user_id': current_user.id,
+            'action': 'OTP_VERIFY',
+            'details': f'Error verifying OTP: {str(e)}',
+            'timestamp': datetime.utcnow(),
+            'status': 'Denied'
+        })
         return jsonify({'success': False, 'message': 'Error verifying OTP'})
 
 @app.route('/scan-usb', methods=['POST'])
@@ -414,6 +447,11 @@ def api_pd_status():
     insert_count = usb_drives_collection.count_documents({'user_id': current_user.id})
     # Needs OTP if drive detected and not yet verified
     needs_otp = bool(drives)
+    # --- Reset session flag if USB is removed ---
+    if not drives:
+        session.pop('auto_otp_sent', None)
+        session.pop('usb_otp', None)
+        session.pop('otp_time', None)
     return jsonify({
         'active': bool(drives),
         'insert_count': insert_count,
@@ -504,6 +542,31 @@ def api_scan_pd():
         'timestamp': datetime.utcnow()
     })
     return jsonify(scan_result)
+
+@app.route('/api/access-history')
+@login_required
+def api_access_history():
+    # Fetch all access logs for this user
+    logs = access_logs_collection.find({'user_id': current_user.id}).sort('timestamp', -1)
+    history = []
+    for log in logs:
+        ts = log.get('timestamp')
+        if isinstance(ts, datetime):
+            timestamp_str = ts.strftime('%Y-%m-%d %H:%M:%S')
+            day_str = ts.strftime('%A')
+        else:
+            timestamp_str = str(ts)
+            day_str = '-'
+        status = 'Granted' if ('granted' in log.get('details', '').lower() or 'no threats' in log.get('details', '').lower() or 'no virus' in log.get('details', '').lower()) else 'Denied'
+        history.append({
+            'timestamp': timestamp_str,
+            'day': day_str,
+            'drive_name': log.get('drive_path', log.get('drive_name', '-')),
+            'serial_number': log.get('serial_number', '-'),
+            'status': status,
+            'details': log.get('details', '-')
+        })
+    return jsonify({'history': history})
 
 if __name__ == '__main__':
     app.config['DEBUG'] = True
