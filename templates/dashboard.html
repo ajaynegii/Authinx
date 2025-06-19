@@ -197,7 +197,6 @@ function updateThreats() {
 }
 
 function updateAccessStatus() {
-    // Fetch USB status first
     fetch('/api/pd-status')
         .then(res => res.json())
         .then(statusData => {
@@ -207,7 +206,6 @@ function updateAccessStatus() {
                 document.getElementById('file-browser').style.display = 'none';
                 return;
             }
-            // If USB is detected, check scan status
             fetch('/api/pd-scan-status')
                 .then(res => res.json())
                 .then(scanData => {
@@ -218,16 +216,47 @@ function updateAccessStatus() {
                         status.innerHTML = '<span class="badge bg-success fs-6">Access Granted</span>';
                         document.getElementById('file-browser').style.display = 'block';
                         document.getElementById('file-browser-info').style.display = 'none';
+                        loadFiles(); // Show files if access granted
                         loadAccessHistory();
                     } else {
                         status.innerHTML = '<span class="badge bg-danger fs-6">Access Denied (Virus Found)</span>';
                         document.getElementById('file-browser').style.display = 'block';
                         document.getElementById('file-browser-info').style.display = 'block';
                         document.getElementById('file-browser-info').textContent = 'All downloads are blocked due to detected threats.';
+                        clearFileList(); // Clear files if access denied
                         loadAccessHistory();
                     }
                 });
         });
+}
+
+function loadFiles() {
+    fetch('/api/pd-files')
+        .then(res => res.json())
+        .then(data => {
+            const tbody = document.getElementById('file-list');
+            tbody.innerHTML = '';
+            if (data.files.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5">No files found.</td></tr>';
+            } else {
+                data.files.forEach(file => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${file.name}</td>
+                        <td>${file.type}</td>
+                        <td>${file.size}</td>
+                        <td>${file.modified}</td>
+                        <td>${file.is_dir ? '' : `<a href="/download-file?path=${encodeURIComponent(file.path)}" class="btn btn-sm btn-primary">Download</a>`}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+        });
+}
+
+function clearFileList() {
+    const tbody = document.getElementById('file-list');
+    tbody.innerHTML = '';
 }
 
 function loadAccessHistory() {
