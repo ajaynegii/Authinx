@@ -20,8 +20,8 @@
                     <p><strong>Status:</strong> {{ drive.status }}</p>
                 </div>
                 <div class="col-md-6">
-                    <p><strong>Added:</strong> {{ drive.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-                    <p><strong>Last Access:</strong> {{ drive.last_access.strftime('%Y-%m-%d %H:%M:%S') if drive.last_access else 'Never' }}</p>
+                    <p><strong>Added:</strong> {{ drive.created_at | utc_to_ist }}</p>
+                    <p><strong>Last Access:</strong> {{ drive.last_access | utc_to_ist }}</p>
                 </div>
             </div>
         </div>
@@ -37,7 +37,7 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Time</th>
+                                <th>Time (IST)</th>
                                 <th>Action</th>
                                 <th>Details</th>
                             </tr>
@@ -45,7 +45,7 @@
                         <tbody>
                             {% for log in logs %}
                             <tr>
-                                <td>{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                <td>{{ log.timestamp | utc_to_ist }}</td>
                                 <td>{{ log.action }}</td>
                                 <td>{{ log.details }}</td>
                             </tr>

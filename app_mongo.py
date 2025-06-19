@@ -13,12 +13,51 @@ import subprocess
 import mimetypes
 from werkzeug.utils import secure_filename
 import random
+import pytz
 
 # Load environment variables
 load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key-here')
+
+# Custom Jinja2 filter to convert UTC to IST
+@app.template_filter('utc_to_ist')
+def utc_to_ist(timestamp):
+    """Convert UTC timestamp to IST"""
+    if timestamp is None:
+        return 'Never'
+    
+    # Create UTC timezone object
+    utc_tz = pytz.UTC
+    # Create IST timezone object
+    ist_tz = pytz.timezone('Asia/Kolkata')
+    
+    # If timestamp is naive (no timezone), assume it's UTC
+    if timestamp.tzinfo is None:
+        timestamp = utc_tz.localize(timestamp)
+    
+    # Convert to IST
+    ist_time = timestamp.astimezone(ist_tz)
+    return ist_time.strftime('%Y-%m-%d %H:%M:%S')
+
+def convert_utc_to_ist(timestamp):
+    """Helper function to convert UTC timestamp to IST string"""
+    if timestamp is None:
+        return 'Never'
+    
+    # Create UTC timezone object
+    utc_tz = pytz.UTC
+    # Create IST timezone object
+    ist_tz = pytz.timezone('Asia/Kolkata')
+    
+    # If timestamp is naive (no timezone), assume it's UTC
+    if timestamp.tzinfo is None:
+        timestamp = utc_tz.localize(timestamp)
+    
+    # Convert to IST
+    ist_time = timestamp.astimezone(ist_tz)
+    return ist_time.strftime('%Y-%m-%d %H:%M:%S')
 
 # MongoDB configuration
 try:
@@ -408,7 +447,7 @@ def list_files():
                     'is_dir': os.path.isdir(full_path),
                     'size': f"{stat.st_size / 1024:.1f} KB" if not os.path.isdir(full_path) else '',
                     'type': mimetypes.guess_type(full_path)[0] or 'Unknown',
-                    'modified': datetime.fromtimestamp(stat.st_mtime).strftime('%Y-%m-%d %H:%M:%S')
+                    'modified': convert_utc_to_ist(datetime.fromtimestamp(stat.st_mtime))
                 })
             except Exception as e:
                 print(f"Error getting file info for {full_path}: {str(e)}")
@@ -508,7 +547,7 @@ def api_pd_files():
                 'path': full_path,
                 'type': 'directory' if os.path.isdir(full_path) else 'file',
                 'size': f"{stat.st_size / 1024:.1f} KB" if not os.path.isdir(full_path) else '',
-                'modified': datetime.fromtimestamp(stat.st_mtime).strftime('%Y-%m-%d %H:%M:%S')
+                'modified': convert_utc_to_ist(datetime.fromtimestamp(stat.st_mtime))
             })
         except Exception:
             continue
@@ -552,8 +591,14 @@ def api_access_history():
     for log in logs:
         ts = log.get('timestamp')
         if isinstance(ts, datetime):
-            timestamp_str = ts.strftime('%Y-%m-%d %H:%M:%S')
-            day_str = ts.strftime('%A')
+            timestamp_str = convert_utc_to_ist(ts)
+            # Get day from IST time
+            utc_tz = pytz.UTC
+            ist_tz = pytz.timezone('Asia/Kolkata')
+            if ts.tzinfo is None:
+                ts = utc_tz.localize(ts)
+            ist_time = ts.astimezone(ist_tz)
+            day_str = ist_time.strftime('%A')
         else:
             timestamp_str = str(ts)
             day_str = '-'
