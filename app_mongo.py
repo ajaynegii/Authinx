@@ -270,149 +270,44 @@ def detect_usb_drives():
         print(f"Error detecting USB drives: {str(e)}")
         return []
 
-def scan_drive(drive_path):
-    """Scan drive for malware using ClamAV"""
+def custom_scan_drive(drive_path):
+    """Custom antivirus scan: flags suspicious files by extension or content."""
+    suspicious_exts = ['.exe', '.bat', '.vbs', '.scr', '.pif', '.js', '.cmd', '.com']
+    suspicious_keywords = [b'malware', b'virus', b'trojan']
+    threats = []
     try:
-        # Check if ClamAV is installed
-        clamd_path = r"C:\Program Files\ClamAV\clamd.exe"
-        if not os.path.exists(clamd_path):
-            return {'safe': True, 'message': 'ClamAV not installed, skipping scan'}
-        
-        # Run ClamAV scan
-        cmd = f'"{clamd_path}" --scan "{drive_path}"'
-        result = subprocess.run(cmd, capture_output=True, text=True)
-        
-        # Check if any malware was found
-        if 'FOUND' in result.stdout:
-            return {'safe': False, 'message': 'Malware detected'}
-        return {'safe': True, 'message': 'Scan completed, no threats found'}
+        for root, dirs, files in os.walk(drive_path):
+            for fname in files:
+                fpath = os.path.join(root, fname)
+                ext = os.path.splitext(fname)[1].lower()
+                if ext in suspicious_exts:
+                    threats.append(f"Suspicious file extension: {fname}")
+                    continue
+                try:
+                    with open(fpath, 'rb') as f:
+                        content = f.read(2048)  # Read first 2KB
+                        for keyword in suspicious_keywords:
+                            if keyword in content:
+                                threats.append(f"Suspicious content in: {fname}")
+                                break
+                except Exception:
+                    continue
+        if threats:
+            return {'safe': False, 'message': 'Threats found: ' + '; '.join(threats)}
+        else:
+            return {'safe': True, 'message': 'Custom scan completed, no threats found'}
     except Exception as e:
-        print(f"Error scanning drive: {str(e)}")
-        return {'safe': False, 'message': 'Error during scan'}
-
-@app.route('/check-usb')
-@login_required
-def check_usb():
-    """Check for connected USB drives"""
-    drives = detect_usb_drives()
-    return jsonify({
-        'detected': len(drives) > 0,
-        'drive_path': drives[0] if drives else 'No USB drive detected'
-    })
-
-@app.route('/verify-usb', methods=['POST'])
-@login_required
-def verify_usb():
-    """Send automatic OTP for USB verification (only once per session)"""
-    try:
-        # Check if automatic OTP was already sent in this session
-        if session.get('auto_otp_sent'):
-            return jsonify({'success': True, 'message': 'OTP already sent automatically', 'otp_already_sent': True})
-
-        # Generate random 6-digit OTP
-        otp = str(random.randint(100000, 999999))
-        print(f"[DEBUG] Automatic OTP for {current_user.email}: {otp}")  # Print OTP for testing
-
-        # Send OTP via email
-        msg = Message('USB Drive Verification OTP',
-                     sender=app.config['MAIL_USERNAME'],
-                     recipients=[current_user.email])
-        msg.body = f'Your OTP for USB drive verification is: {otp}'
-        try:
-            mail.send(msg)
-            print(f"[DEBUG] Automatic OTP email sent to {current_user.email}")
-        except Exception as mail_error:
-            import traceback
-            print(f"[ERROR] Failed to send automatic OTP email: {mail_error}")
-            traceback.print_exc()
-            return jsonify({'success': False, 'message': f'Error sending OTP: {mail_error}'})
-
-        # Store OTP in session and mark automatic OTP as sent
-        session['usb_otp'] = otp
-        session['otp_time'] = datetime.utcnow().timestamp()
-        session['auto_otp_sent'] = True
-
-        return jsonify({'success': True, 'message': 'OTP sent automatically', 'otp_already_sent': False})
-    except Exception as e:
-        import traceback
-        print(f"[ERROR] Unexpected error in verify_usb: {e}")
-        traceback.print_exc()
-        return jsonify({'success': False, 'message': f'Unexpected error: {e}'})
-
-@app.route('/verify-usb-otp', methods=['POST'])
-@login_required
-def verify_usb_otp():
-    """Verify OTP for USB access"""
-    try:
-        data = request.get_json()
-        otp = data.get('otp')
-        # Check if OTP exists and is not expired (5 minutes)
-        stored_otp = session.get('usb_otp')
-        otp_time = session.get('otp_time')
-        if not stored_otp or not otp_time:
-            # Log denied attempt
-            access_logs_collection.insert_one({
-                'user_id': current_user.id,
-                'action': 'OTP_VERIFY',
-                'details': 'No OTP found',
-                'timestamp': datetime.utcnow(),
-                'status': 'Denied'
-            })
-            return jsonify({'success': False, 'message': 'No OTP found'})
-        if datetime.utcnow().timestamp() - otp_time > 300:  # 5 minutes
-            # Log denied attempt
-            access_logs_collection.insert_one({
-                'user_id': current_user.id,
-                'action': 'OTP_VERIFY',
-                'details': 'OTP expired',
-                'timestamp': datetime.utcnow(),
-                'status': 'Denied'
-            })
-            return jsonify({'success': False, 'message': 'OTP expired'})
-        if otp != stored_otp:
-            # Log denied attempt
-            access_logs_collection.insert_one({
-                'user_id': current_user.id,
-                'action': 'OTP_VERIFY',
-                'details': 'Invalid OTP',
-                'timestamp': datetime.utcnow(),
-                'status': 'Denied'
-            })
-            return jsonify({'success': False, 'message': 'Invalid OTP'})
-        # Clear OTP from session
-        session.pop('usb_otp', None)
-        session.pop('otp_time', None)
-        # Log granted attempt
-        access_logs_collection.insert_one({
-            'user_id': current_user.id,
-            'action': 'OTP_VERIFY',
-            'details': 'OTP verified. Access granted.',
-            'timestamp': datetime.utcnow(),
-            'status': 'Granted'
-        })
-        return jsonify({'success': True})
-    except Exception as e:
-        print(f"Error verifying OTP: {str(e)}")
-        access_logs_collection.insert_one({
-            'user_id': current_user.id,
-            'action': 'OTP_VERIFY',
-            'details': f'Error verifying OTP: {str(e)}',
-            'timestamp': datetime.utcnow(),
-            'status': 'Denied'
-        })
-        return jsonify({'success': False, 'message': 'Error verifying OTP'})
+        return {'safe': False, 'message': f'Custom scan error: {str(e)}'}
 
 @app.route('/scan-usb', methods=['POST'])
 @login_required
 def scan_usb():
-    """Scan USB drive for malware"""
+    """Scan USB drive for malware using custom scan"""
     drives = detect_usb_drives()
     if not drives:
         return jsonify({'safe': False, 'message': 'No USB drive detected'})
-    
     drive_path = drives[0]
-    scan_result = scan_drive(drive_path)
-    
+    scan_result = custom_scan_drive(drive_path)
     # Log the scan result
     access_logs_collection.insert_one({
         'user_id': current_user.id,
@@ -421,7 +316,6 @@ def scan_usb():
         'details': scan_result['message'],
         'timestamp': datetime.utcnow()
     })
-    
     return jsonify(scan_result)
 
 @app.route('/list-files')
@@ -571,7 +465,7 @@ def api_scan_pd():
     if not drives:
         return jsonify({'safe': False, 'message': 'No USB drive detected'})
     drive_path = drives[0]
-    scan_result = scan_drive(drive_path)
+    scan_result = custom_scan_drive(drive_path)
     # Log the scan result
     access_logs_collection.insert_one({
         'user_id': current_user.id,
@@ -612,6 +506,67 @@ def api_access_history():
             'details': log.get('details', '-')
         })
     return jsonify({'history': history})
+
+@app.route('/verify-usb', methods=['POST'])
+@login_required
+def verify_usb():
+    """Send automatic OTP for USB verification (only once per session)"""
+    try:
+        # Check if automatic OTP was already sent in this session
+        if session.get('auto_otp_sent'):
+            return jsonify({'success': True, 'message': 'OTP already sent automatically', 'otp_already_sent': True})
+
+        # Generate random 6-digit OTP
+        otp = str(random.randint(100000, 999999))
+        print(f"[DEBUG] Automatic OTP for {current_user.email}: {otp}")  # Print OTP for testing
+
+        # Send OTP via email
+        msg = Message('USB Drive Verification OTP',
+                     sender=app.config['MAIL_USERNAME'],
+                     recipients=[current_user.email])
+        msg.body = f'Your OTP for USB drive verification is: {otp}'
+        try:
+            mail.send(msg)
+            print(f"[DEBUG] Automatic OTP email sent to {current_user.email}")
+        except Exception as mail_error:
+            import traceback
+            print(f"[ERROR] Failed to send automatic OTP email: {mail_error}")
+            traceback.print_exc()
+            return jsonify({'success': False, 'message': f'Error sending OTP: {mail_error}'}), 500
+
+        # Store OTP in session and mark automatic OTP as sent
+        session['usb_otp'] = otp
+        session['otp_time'] = datetime.utcnow().timestamp()
+        session['auto_otp_sent'] = True
+
+        return jsonify({'success': True, 'message': 'OTP sent automatically', 'otp_already_sent': False})
+    except Exception as e:
+        import traceback
+        print(f"[ERROR] Unexpected error in verify_usb: {e}")
+        traceback.print_exc()
+        return jsonify({'success': False, 'message': f'Unexpected error: {e}'}), 500
+
+@app.route('/verify-usb-otp', methods=['POST'])
+@login_required
+def verify_usb_otp():
+    try:
+        data = request.get_json()
+        otp = data.get('otp')
+        stored_otp = session.get('usb_otp')
+        otp_time = session.get('otp_time')
+        if not stored_otp or not otp_time:
+            return jsonify({'success': False, 'message': 'No OTP found'}), 400
+        if datetime.utcnow().timestamp() - otp_time > 300:  # 5 minutes expiry
+            return jsonify({'success': False, 'message': 'OTP expired'}), 400
+        if otp != stored_otp:
+            return jsonify({'success': False, 'message': 'Invalid OTP'}), 400
+        # OTP is valid
+        session.pop('usb_otp', None)
+        session.pop('otp_time', None)
+        session['auto_otp_sent'] = False  # Allow new OTP for next USB
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Error: {str(e)}'}), 500
 
 if __name__ == '__main__':
     app.config['DEBUG'] = True
