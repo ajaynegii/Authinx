@@ -316,6 +316,8 @@ def scan_usb():
         'details': scan_result['message'],
         'timestamp': datetime.utcnow()
     })
+    # Store only the scan result message in the session
+    session['current_scan_result'] = scan_result['message']
     return jsonify(scan_result)
 
 @app.route('/list-files')
@@ -474,6 +476,8 @@ def api_scan_pd():
         'details': scan_result['message'],
         'timestamp': datetime.utcnow()
     })
+    # Store only the scan result message in the session
+    session['current_scan_result'] = scan_result['message']
     return jsonify(scan_result)
 
 @app.route('/api/access-history')
@@ -567,6 +571,15 @@ def verify_usb_otp():
         return jsonify({'success': True})
     except Exception as e:
         return jsonify({'success': False, 'message': f'Error: {str(e)}'}), 500
+
+@app.route('/api/current-scan-result')
+@login_required
+def api_current_scan_result():
+    result = session.get('current_scan_result')
+    if result:
+        return jsonify({'result': result})
+    else:
+        return jsonify({'result': None})
 
 if __name__ == '__main__':
     app.config['DEBUG'] = True

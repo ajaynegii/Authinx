@@ -180,20 +180,18 @@ function sendOTP() {
 }
 
 function updateThreats() {
-    fetch('/api/pd-threats')
+    fetch('/api/current-scan-result')
         .then(res => res.json())
         .then(data => {
-            threats = data.threats || [];
             const list = document.getElementById('threats-list');
             list.innerHTML = '';
-            if (threats.length === 0) {
-                list.innerHTML = '<li class="text-success">No threats found.</li>';
+            if (!data.result) {
+                list.innerHTML = '<li class="text-muted">No Recent Update</li>';
             } else {
-                threats.forEach(t => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<span class="text-danger"><i class="fas fa-exclamation-triangle"></i> ${t}</span>`;
-                    list.appendChild(li);
-                });
+                // Show the current scan result (can be a string with multiple threats)
+                const li = document.createElement('li');
+                li.innerHTML = `<span class="text-danger"><i class="fas fa-exclamation-triangle"></i> ${data.result}</span>`;
+                list.appendChild(li);
             }
         });
 }
