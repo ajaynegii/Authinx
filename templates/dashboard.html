@@ -197,28 +197,36 @@ function updateThreats() {
 }
 
 function updateAccessStatus() {
-    fetch('/api/pd-scan-status')
+    // Fetch USB status first
+    fetch('/api/pd-status')
         .then(res => res.json())
-        .then(data => {
-            pdSafe = data.safe;
+        .then(statusData => {
             const status = document.getElementById('access-status');
-            if (data.scanned) {
-                if (pdSafe) {
-                    status.innerHTML = '<span class="badge bg-success fs-6">Access Granted</span>';
-                    document.getElementById('file-browser').style.display = 'block';
-                    document.getElementById('file-browser-info').style.display = 'none';
-                    loadAccessHistory();
-                } else {
-                    status.innerHTML = '<span class="badge bg-danger fs-6">Access Denied (Virus Found)</span>';
-                    document.getElementById('file-browser').style.display = 'block';
-                    document.getElementById('file-browser-info').style.display = 'block';
-                    document.getElementById('file-browser-info').textContent = 'All downloads are blocked due to detected threats.';
-                    loadAccessHistory(); // show files but block download
-                }
-            } else {
-                status.innerHTML = '<span class="badge bg-secondary fs-6">Pending scan...</span>';
+            if (!statusData.active) {
+                status.innerHTML = '<span class="badge bg-secondary fs-6">USB Not Detected</span>';
                 document.getElementById('file-browser').style.display = 'none';
+                return;
             }
+            // If USB is detected, check scan status
+            fetch('/api/pd-scan-status')
+                .then(res => res.json())
+                .then(scanData => {
+                    if (!scanData.scanned) {
+                        status.innerHTML = '<span class="badge bg-warning text-dark fs-6">USB Blocked: Verification and Scan Required</span>';
+                        document.getElementById('file-browser').style.display = 'none';
+                    } else if (scanData.safe) {
+                        status.innerHTML = '<span class="badge bg-success fs-6">Access Granted</span>';
+                        document.getElementById('file-browser').style.display = 'block';
+                        document.getElementById('file-browser-info').style.display = 'none';
+                        loadAccessHistory();
+                    } else {
+                        status.innerHTML = '<span class="badge bg-danger fs-6">Access Denied (Virus Found)</span>';
+                        document.getElementById('file-browser').style.display = 'block';
+                        document.getElementById('file-browser-info').style.display = 'block';
+                        document.getElementById('file-browser-info').textContent = 'All downloads are blocked due to detected threats.';
+                        loadAccessHistory();
+                    }
+                });
         });
 }
 

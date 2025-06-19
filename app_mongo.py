@@ -387,6 +387,7 @@ def api_pd_status():
         session.pop('auto_otp_sent', None)
         session.pop('usb_otp', None)
         session.pop('otp_time', None)
+        session.pop('current_scan_result', None)  # Clear scan result on USB removal
     return jsonify({
         'active': bool(drives),
         'insert_count': insert_count,
@@ -408,13 +409,10 @@ def api_pd_threats():
 @app.route('/api/pd-scan-status')
 @login_required
 def api_pd_scan_status():
-    # Get last scan result for this user
-    log = access_logs_collection.find_one({
-        'user_id': current_user.id,
-        'action': 'SCAN'
-    }, sort=[('timestamp', -1)])
-    if log:
-        safe = 'no threats' in log['details'].lower() or 'no virus' in log['details'].lower()
+    # Only consider scan complete if session scan result exists
+    scan_result = session.get('current_scan_result')
+    if scan_result:
+        safe = 'no threats' in scan_result.lower() or 'no virus' in scan_result.lower()
         return jsonify({'scanned': True, 'safe': safe})
     return jsonify({'scanned': False, 'safe': None})
 
